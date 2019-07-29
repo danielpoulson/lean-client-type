@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 // import config from '../configEnv'
 
 // export function setAuthorizationToken(token) {
@@ -10,9 +10,9 @@ import axios from 'axios'
 // }
 
 const config = {
-  serverURL: 'http://localhost:3333/api'
-  // serverURL: 'http://maintx.deltalabs.com.au:3333/api'
-}
-axios.defaults.baseURL = config.serverURL
-axios.defaults.headers.post['Content-Type'] =
-  'application/x-www-form-urlencoded'
+  // serverURL: 'http://localhost:3333/api'
+  serverURL: "http://maintx.deltalabs.com.au:3333/api"
+};
+axios.defaults.baseURL = config.serverURL;
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
