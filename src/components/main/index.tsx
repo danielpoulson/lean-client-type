@@ -4,6 +4,26 @@ import MainList from "./main-list";
 import NavBar from "../../layout/navbar";
 // import { getOEEData } from "../../api/oee.api";
 
+const endpoint = "http://localhost:3060/graphql";
+const query = `
+{
+  getCells {
+    machno
+    downtime
+    runtime
+    downpc
+    units
+    avail
+    perf
+    oee
+    idle
+    unitsmin
+    downnone
+    shiftseq
+  }
+}
+`;
+
 function Mattec() {
   const [oeeData, getOEE] = useState([]);
 
@@ -12,30 +32,8 @@ function Mattec() {
   }, []);
 
   const onLoadData = () => {
-    // getOEEData().then((oee: any) => {
-    //   getOEE(oee.data);
-    // });
-    const endpoint = "http://localhost:3060/graphql";
     const graphQLClient = new GraphQLClient(endpoint, { headers: {} });
 
-    const query = `
-      {
-        getCells {
-          machno
-          downtime
-          runtime
-          downpc
-          units
-          avail
-          perf
-          oee
-          idle
-          unitsmin
-          downnone
-          shiftseq
-        }
-    }
-    `;
     graphQLClient.request(query).then(data => getOEE(data.getCells));
   };
 
