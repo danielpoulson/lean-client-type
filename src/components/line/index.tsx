@@ -4,9 +4,45 @@ import Gauge from "../gauge/gauge";
 import OEEBar from "../bar/oeeBar";
 import DownBar from "../bar/downBar";
 import DataList from "../data-list";
-import { getLineData } from "../../api/line.api";
+import { GraphQLClient } from "graphql-request";
 import { oeeData, yearLabels } from "./mockData";
 import "./line.css";
+
+const endpoint = "http://localhost:3060/graphql";
+const query = `
+query getCell($id: Int!) {
+  getCell(id: $id) {
+    day { 
+      machno
+      downtime
+      runtime
+      downpc
+      units
+      avail
+      perf
+      oee
+      idle
+      unitsmin
+      downnone
+    }
+    
+  	month {
+      oee
+    }
+    
+    oeeTrend {
+      line
+      oeedata
+    }
+    
+    downPareto {
+      labels
+      values
+      pareto
+    }
+  }
+}
+`;
 
 const def = {
   day: {
@@ -47,9 +83,11 @@ const machName = [
 function Line(props) {
   const [lineData, loadLineData] = useState(def);
   useEffect(() => {
-    getLineData(props.id).then((line: any) => {
-      loadLineData(line.data);
-    });
+    const graphQLClient = new GraphQLClient(endpoint, { headers: {} });
+
+    graphQLClient
+      .request(query, { id: +props.id })
+      .then(data => loadLineData(data.getCell));
   }, [props]);
 
   return (
